@@ -28,8 +28,8 @@ class QuerySelection extends Component
         }
 
         // $result = SearchEngineController::getSearchEngine($query_string);
+        // dd($result);
          dd($query_string);
-        //dd($this->query);
     }
 
 }
