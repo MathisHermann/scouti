@@ -7,7 +7,7 @@
                 <div x-data="{
                         show_add_button: true,
                         show_delete_button: false,
-                        fields: @entangle('query'),
+                        fields: @entangle('terms'),
                         currentOption: {value: ''},
                         get showDeleteField() {
                             return this.fields.length > 2
@@ -36,19 +36,27 @@
                 >
                     <template x-for="option in fields">
                         <div class="flex justify-between">
-                            <input type="text"
-                                   class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 px-4 rounded-full"
-                                   x-model="option.value"
-                                   >
+                            <input
+                                type="text"
+                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 px-4 rounded-full"
+                                x-model="option.value"
+                                @keyup.enter="$wire.find_results()"
+                            >
 
-                            <button x-show="showDeleteField" @click.stop="remove(option)"
-                                    class="block sm:text-sm border-gray-300">
+                            <button
+                                class="block sm:text-sm border-gray-300"
+                                x-show="showDeleteField"
+                                @click.stop="remove(option)"
+                            >
                                 <x-ei-close class="text-gray-500 h-6 w-6"/>
                             </button>
                         </div>
                     </template>
-                    <button x-show="showAddField" @click.stop="add"
-                            class="flex flex-row items-center block sm:text-sm text-base text-gray-500 border-gray-300 ml-auto mr-0">
+                    <button
+                        class="flex flex-row items-center block sm:text-sm text-base text-gray-500 border-gray-300 ml-auto mr-0"
+                        x-show="showAddField"
+                        @click.stop="add"
+                    >
                         <x-ei-plus class="h-8 w-8"/>
                         <span class="align-middle">
                                 Add new

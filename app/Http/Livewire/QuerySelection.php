@@ -7,11 +7,12 @@ use Livewire\Component;
 
 class QuerySelection extends Component
 {
-    public $query;
+
+    public $terms;
 
     public function mount()
     {
-        $this->query = [['value' => ''], ['value' => '']];
+        $this->terms = [['value' => ''], ['value' => '']];
     }
 
     public function render()
@@ -19,17 +20,40 @@ class QuerySelection extends Component
         return view('livewire.query-selection');
     }
 
+    /**
+     * Gets called on firing the "Find results" button in the frontend.
+     * Call the  function to make the search engine query string.
+     * Call the search engine with the according string.
+     */
     public function find_results()
     {
-        $query_string = '';
-        foreach ($this->query as $query_item) {
-            if ($query_item['value'] && strlen($query_item['value']) > 0)
-                $query_string = $query_string . '%20' . $query_item['value'];
+        $query = $this->make_string();
+        $result = SearchEngineController::getSearchEngineLinks($query);
+        dd($result);
+    }
+
+    /**
+     * Concatenate the query string for the search engine.
+     * Fields with multiple words are concatenated to a phrase.
+     * Blanks are replaced with '%20'.
+     * @return string
+     */
+    private function make_string(): string
+    {
+        $query = '';
+
+        for ($i = 0; $i < sizeof($this->terms); $i++) {
+
+            $is_phrase = strpos($this->terms[$i]['value'], ' ');
+
+            if ($this->terms[$i]['value'] && strlen($this->terms[$i]['value']) > 0) {
+                $part = str_replace(' ', '%20', $this->terms[$i]['value']);
+                $query .= (strlen($query) > 0 ? '%20' : '') . ($is_phrase ? '"' : '') . $part . ($is_phrase ? '"' : '');
+            }
         }
 
-        // $result = SearchEngineController::getSearchEngine($query_string);
-        // dd($result);
-         dd($query_string);
+        return $query;
+
     }
 
 }
