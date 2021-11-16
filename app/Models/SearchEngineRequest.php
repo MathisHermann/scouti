@@ -11,6 +11,11 @@ class SearchEngineRequest extends Model
 
     protected $guarded =  [];
 
+    public function searchEngineResults()
+    {
+        return $this->hasMany(SearchEngineResult::class);
+    }
+
     public function scopeKnownKeywords($query, $keywords)
     {
         $query->where('keywords_sorted', json_encode($keywords))

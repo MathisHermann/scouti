@@ -5,16 +5,14 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
     @livewireStyles
-
+    <style>
+        [x-cloak] {display: none;}
+    </style>
     <title>Scouti</title>
 
 </head>
 <body class="bg-gray-100">
-<div class="sm:mx-auto sm:w-full sm:max-w-md">
-    <h2 class="mt-64 text-center text-3xl font-extrabold text-gray-900">
-        Scouti
-    </h2>
-</div>
+
 @yield('content')
 
 @livewireScripts
