@@ -1,9 +1,22 @@
 <div class="min-h-full">
     <main class="mt-16 w-full">
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-            <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <div class="items-end">
+                <a href="/settings">
+                    <button
+                        class="flex flex-row items-center block sm:text-sm text-gray-500 border-gray-300 ml-auto mr-0  py-2 px-4 mt-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                        <span class="align-middle text-white">
+                            Settings
+                        </span>
+                    </button>
+                </a>
+            </div>
+            <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 mt-3">
                 <label for="name"
-                       class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">Keywords</label>
+                       class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
+                    Keywords
+                </label>
                 <div x-data="{
                         show_add_button: true,
                         show_delete_button: false,
@@ -62,8 +75,29 @@
                                 Add new
                             </span>
                     </button>
+
+                    <div>
+                        <label for="location" class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
+                            Industry
+                        </label>
+                        <select
+                            wire:model="industry"
+                            id="location"
+                            name="location"
+                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-full">
+                            <option selected disabled>
+                                {{ 'Select' }}
+                            </option>
+                            @foreach($industries as $industry_option)
+                                <option value="{{ $industry_option['value'] }}">{{ $industry_option['value'] }}</option>
+                            @endforeach
+                        </select>
+
+                    </div>
+
                     <button wire:click="find_results()"
-                            class="w-full py-2 px-4 mt-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            class="w-full py-2 px-4 mt-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
                         Find results
                     </button>
                 </div>
@@ -77,11 +111,13 @@
                 <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 
                     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                         aria-hidden="true"></div>
-
+                         aria-hidden="true">
+                    </div>
 
                     <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
-                          aria-hidden="true">&#8203;</span>
+                          aria-hidden="true">
+                        &#8203;
+                    </span>
 
                     <div
                         class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
@@ -107,3 +143,64 @@
         </div>
     </main>
 </div>
+
+@if(Session::has('error_dropdown_selection'))
+    <!-- This example requires Tailwind CSS v2.0+ -->
+    <!-- Global notification live region, render this permanently at the end of the document -->
+    <div
+        x-data="{error_notification : true }">
+        <div
+            x-show="error_notification"
+            aria-live="assertive"
+            class="fixed inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6 sm:items-start">
+            <div class="w-full flex flex-col items-center space-y-4 sm:items-end">
+                <!--
+                  Notification panel, dynamically insert this into the live region when it needs to be displayed
+
+                  Entering: "transform ease-out duration-300 transition"
+                    From: "translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+                    To: "translate-y-0 opacity-100 sm:translate-x-0"
+                  Leaving: "transition ease-in duration-100"
+                    From: "opacity-100"
+                    To: "opacity-0"
+                -->
+                <div
+                    class="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
+                    <div class="p-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="stroke-2 text-red-600 h-6 w-6">
+                                    <!-- Heroicon name: outline/check-circle -->
+                                    <x-ei-close-o class="stroke-2"/>
+                                </div>
+                            </div>
+                            <div class="ml-3 w-0 flex-1 pt-0.5">
+                                <p class="text-sm font-medium text-gray-900">
+                                    Industry needed
+                                </p>
+                                <p class="mt-1 text-sm text-gray-500">
+                                    To make a request, please select an industry.
+                                </p>
+                            </div>
+                            <div class="ml-4 flex-shrink-0 flex">
+                                <button
+                                    x-on:click="error_notification = false"
+                                    class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <span class="sr-only">Close</span>
+                                    <!-- Heroicon name: solid/x -->
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                         fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd"
+                                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                              clip-rule="evenodd"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
