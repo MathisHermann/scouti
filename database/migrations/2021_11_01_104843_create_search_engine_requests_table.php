@@ -17,6 +17,7 @@ class CreateSearchEngineRequestsTable extends Migration
             $table->id();
             $table->text('keywords');
             $table->text('keywords_sorted');
+            $table->text('industry');
             $table->boolean('successful');
             $table->timestamps();
         });

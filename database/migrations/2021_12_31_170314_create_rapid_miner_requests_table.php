@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIndustrySelectionsTable extends Migration
+class CreateRapidMinerRequestsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class CreateIndustrySelectionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('industry_selections', function (Blueprint $table) {
+        Schema::create('rapid_miner_requests', function (Blueprint $table) {
             $table->id();
-            $table->text('industries');
+            $table->string('job_id');
+            $table->boolean('successful');
+            $table->string('queue_name');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ class CreateIndustrySelectionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('industry_selections');
+        Schema::dropIfExists('rapid_miner_requests');
     }
 }

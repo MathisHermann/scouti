@@ -23,7 +23,7 @@
                         fields: @entangle('terms'),
                         currentOption: {value: ''},
                         get showDeleteField() {
-                            return this.fields.length > 2
+                            return this.fields.length > 1
                         },
                         get showAddField () {
                             return this.fields.length < 6
@@ -37,7 +37,7 @@
                         },
                         remove (option) {
                             console.log(option)
-                           if (this.fields.length > 2) {
+                           if (this.fields.length > 1) {
                                 const index = this.fields.findIndex(element => element.value === option.value);
                                 if (index !== -1) {
                                     this.fields.splice(index, 1);
@@ -133,7 +133,7 @@
                             </div>
                             <div class="mt-3 text-center sm:mt-5">
                                 <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                    Loading {{ $modal_msg }}
+                                    Loading
                                 </h3>
                             </div>
                         </div>

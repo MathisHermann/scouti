@@ -9,7 +9,7 @@ class SearchEngineController extends Controller
     public static function getSearchEngineLinks($query)
     {
         // Google limits the queries per day. Thus, there is a limit for the search.
-        $search_limit = 3;
+        $search_limit = 5;
         $limit = 0;
         $no_results = false;
 

@@ -29,8 +29,11 @@
                         get showDeleteField() {
                             return this.fields.length > 2
                         },
+                        get showAddField() {
+                            return this.fields.length < 10
+                        },
                         get add () {
-                            if (this.fields.length < {{ $max_industries }}) {
+                            if (this.fields.length < 10) {
                                 this.fields.push({
                                     value: '',
                                 })
@@ -53,7 +56,6 @@
                                 type="text"
                                 class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 px-4 rounded-full"
                                 x-model="option.value"
-                                @keyup.enter="$wire.find_results()"
                             >
 
                             <button
@@ -68,6 +70,7 @@
                     <button
                         class="flex flex-row items-center block sm:text-sm text-base text-gray-500 border-gray-300 ml-auto mr-0"
                         @click.stop="add"
+                        x-show="showAddField"
                     >
                         <x-ei-plus class="h-8 w-8"/>
                         <span class="align-middle">
@@ -78,21 +81,11 @@
             </div>
 
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 mt-6">
-                <label for="name"
-                       class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
-                    Amount of Industries
-                </label>
-                <input wire:model="max_industries" type="number"
-                       class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 px-4 rounded-full">
-            </div>
-
-            <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 mt-6">
                 <button wire:click="save()"
                         class="w-full py-2 px-4 mt-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     Save
                 </button>
             </div>
         </div>
-
     </main>
 </div>

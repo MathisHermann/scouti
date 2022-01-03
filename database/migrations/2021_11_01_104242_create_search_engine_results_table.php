@@ -15,7 +15,7 @@ class CreateSearchEngineResultsTable extends Migration
     {
         Schema::create('search_engine_results', function (Blueprint $table) {
             $table->id();
-            $table->string('url', 100);
+            $table->string('url', 1000);
             $table->foreignId('search_engine_requests_id');
             $table->timestamps();
         });

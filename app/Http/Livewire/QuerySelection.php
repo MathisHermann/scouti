@@ -17,14 +17,18 @@ class QuerySelection extends Component
     public $industries;
     public $industry;
     public $modal_msg;
-    public $ignore = true;
+    public $ignore = false;
     public $default_dropdown = 'Select';
 
     public function mount()
     {
         // TODO: remove the values if not needed anymore!
-        $this->terms = [['value' => 'health care'], ['value' => 'antivirus']];
-        $this->industries = json_decode(IndustrySelection::latest()->first()->industries, true);
+        $this->terms = [['value' => 'antivirus']];
+        $temp_industries = IndustrySelection::latest()->first();
+        if ($temp_industries != null)
+            $this->industries = json_decode($temp_industries->industries, true);
+        else
+            $this->industries = [];
         $this->modal_msg = '';
         $this->industry = $this->default_dropdown;
     }
@@ -62,7 +66,7 @@ class QuerySelection extends Component
             asort($keywords_sorted);
 
             $known_keywords = [];
-            if (!$this->ignore)
+            if (!$this->ignore && false)
                 $known_keywords = SearchEngineRequest::knownKeywords($keywords_sorted)->get();
 
 
@@ -70,11 +74,14 @@ class QuerySelection extends Component
                 dd('Fix this.');
             } else {
                 if (!$this->ignore) {
-
+                    // Add the industry to the selection of the search terms
+                    $terms = $this->terms;
+                    array_push($terms, ['industry' => $this->industry]);
                     $request = new SearchEngineRequest(
                         [
-                            'keywords' => json_encode($this->terms),
+                            'keywords' => json_encode($terms),
                             'keywords_sorted' => json_encode($keywords_sorted),
+                            'industry' => $this->industry,
                             'successful' => sizeof($result) > 0
                         ]
                     );
@@ -88,14 +95,15 @@ class QuerySelection extends Component
                         $se_result->save();
                     }
                 }
+                $rapid_miner_response = RapidMinerController::deployProcess();
+                $rapid_miner_response_ok = $rapid_miner_response->ok();
 
-                $id_token = RapidMinerController::getAccessToken();
-                $rapid_miner_response = RapidMinerController::deployProcess($id_token);
-                $rapid_miner_response_xml = $rapid_miner_response->body();
-                $rapid_miner_results = collect(simplexml_load_string($rapid_miner_response_xml));
-                dd($result);
-                // When everything is prepared, the results page is shown
-            return redirect('results');
+                if ($rapid_miner_response_ok)
+                    return redirect('results');
+                else {
+                    Session::flash('error_dropdown_selection', 'Deployment of rapidminer process not successful.');
+                    return redirect('/');
+                }
             }
 
         }
@@ -120,8 +128,10 @@ class QuerySelection extends Component
                 $query .= (strlen($query) > 0 ? '+' : '') . ($is_phrase ? '"' : '') . $part . ($is_phrase ? '"' : '');
             }
         }
-        $is_phrase = strpos($this->industry, ' ');
-        $query .= '+' . ($is_phrase ? '"' : '') . str_replace(' ','+',$this->industry) . ($is_phrase ? '"' : '');
+        //$is_phrase = strpos($this->industry, ' ');
+        //$query .= '+' . ($is_phrase ? '"' : '') . str_replace(' ', '+', $this->industry) . ($is_phrase ? '"' : '');
+        //$query .= '+' . str_replace(' ', '+', $this->industry);
+        $query .= '+software';
 
         return $query;
     }
