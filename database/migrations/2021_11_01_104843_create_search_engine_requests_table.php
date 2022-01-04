@@ -15,6 +15,7 @@ class CreateSearchEngineRequestsTable extends Migration
     {
         Schema::create('search_engine_requests', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('users_id')->nullable();
             $table->text('keywords');
             $table->text('keywords_sorted');
             $table->text('industry');

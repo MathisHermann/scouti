@@ -16,6 +16,7 @@ class CreateRapidMinerResultsTable extends Migration
         Schema::create('rapid_miner_results', function (Blueprint $table) {
             $table->id();
             $table->foreignId('search_engine_requests_id');
+            $table->foreignId('users_id');
             $table->float('confidence');
             $table->float('Score');
             $table->string('score_tag');

@@ -7,6 +7,7 @@ use App\Http\Controllers\SearchEngineController;
 use App\Models\IndustrySelection;
 use App\Models\SearchEngineRequest;
 use App\Models\SearchEngineResult;
+use App\Models\User;
 use Livewire\Component;
 use Session;
 
@@ -16,21 +17,29 @@ class QuerySelection extends Component
     public $terms;
     public $industries;
     public $industry;
+    public $default_industry = 'Select';
+    public $users;
+    public $user;
+    public $default_user = '-';
     public $modal_msg;
     public $ignore = false;
-    public $default_dropdown = 'Select';
 
     public function mount()
     {
         // TODO: remove the values if not needed anymore!
-        $this->terms = [['value' => 'antivirus']];
+        $this->terms = [['value' => '']];
         $temp_industries = IndustrySelection::latest()->first();
+
         if ($temp_industries != null)
             $this->industries = json_decode($temp_industries->industries, true);
         else
             $this->industries = [];
+        $this->industry = $this->default_industry;
+
+        $this->users = User::all();
+        $this->user = $this->default_user;
+
         $this->modal_msg = '';
-        $this->industry = $this->default_dropdown;
     }
 
 
@@ -46,15 +55,19 @@ class QuerySelection extends Component
      */
     public function find_results()
     {
-        if ($this->industry == $this->default_dropdown) {
+        if ($this->industry == $this->default_industry) {
             Session::flash('error_dropdown_selection', 'Please select an industry option.');
             return redirect('/');
         } else {
-
             $query = $this->make_string();
 
-            // TODO: Change modal_msg according to state
-            $this->modal_msg = 'Fetching Google SE Results';
+            $user_id = null;
+            if($this->user != $this->default_user)
+            {
+                $selected_user = User::where('name', $this->user)->first();
+                $user_id = $selected_user->id;
+            }
+
 
             // TODO: Catch errors and make information accordingly
             $result = SearchEngineController::getSearchEngineLinks($query);
@@ -69,7 +82,6 @@ class QuerySelection extends Component
             if (!$this->ignore && false)
                 $known_keywords = SearchEngineRequest::knownKeywords($keywords_sorted)->get();
 
-
             if (sizeof($known_keywords) > 0) {
                 dd('Fix this.');
             } else {
@@ -79,6 +91,7 @@ class QuerySelection extends Component
                     array_push($terms, ['industry' => $this->industry]);
                     $request = new SearchEngineRequest(
                         [
+                            'users_id' => $user_id,
                             'keywords' => json_encode($terms),
                             'keywords_sorted' => json_encode($keywords_sorted),
                             'industry' => $this->industry,
@@ -95,9 +108,9 @@ class QuerySelection extends Component
                         $se_result->save();
                     }
                 }
+
                 $rapid_miner_response = RapidMinerController::deployProcess();
                 $rapid_miner_response_ok = $rapid_miner_response->ok();
-
                 if ($rapid_miner_response_ok)
                     return redirect('results');
                 else {

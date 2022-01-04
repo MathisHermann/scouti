@@ -1,17 +1,23 @@
 <div class="min-h-full">
     <main class="mt-16 w-full">
         <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-            <div class="items-end">
-                <a href="/settings">
-                    <button
-                        class="flex flex-row items-center block sm:text-sm text-gray-500 border-gray-300 ml-auto mr-0  py-2 px-4 mt-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        <span class="align-middle text-white">
+                <div class="w-full space-x-2 flex justify-end">
+                    <a
+                        class="py-2 px-4 mt-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        href="/settings">
+                        <span>
                             Settings
                         </span>
-                    </button>
-                </a>
-            </div>
+                    </a>
+                    <a
+                        class="py-2 px-4 mt-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        href="/results">
+                        <span>
+                        Results
+                        </span>
+                    </a>
+                </div>
+
             <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 mt-3">
                 <label for="name"
                        class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
@@ -20,7 +26,7 @@
                 <div x-data="{
                         show_add_button: true,
                         show_delete_button: false,
-                        fields: @entangle('terms'),
+                        fields: @entangle('terms').defer,
                         currentOption: {value: ''},
                         get showDeleteField() {
                             return this.fields.length > 1
@@ -45,36 +51,38 @@
                            }
                         }
                     }"
-                     class="space-y-2"
+                     class="space-y-4"
                 >
-                    <template x-for="option in fields">
-                        <div class="flex justify-between">
-                            <input
-                                type="text"
-                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 px-4 rounded-full"
-                                x-model="option.value"
-                                @keyup.enter="$wire.find_results()"
-                            >
+                    <div class="space-y-2">
+                        <template x-for="option in fields">
+                            <div class="flex justify-between">
+                                <input
+                                    type="text"
+                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 px-4 rounded-full"
+                                    x-model="option.value"
+                                    @keyup.enter="$wire.find_results()"
+                                >
 
-                            <button
-                                class="block sm:text-sm border-gray-300"
-                                x-show="showDeleteField"
-                                @click.stop="remove(option)"
-                            >
-                                <x-ei-close class="text-gray-500 h-6 w-6"/>
-                            </button>
-                        </div>
-                    </template>
-                    <button
-                        class="flex flex-row items-center block sm:text-sm text-base text-gray-500 border-gray-300 ml-auto mr-0"
-                        x-show="showAddField"
-                        @click.stop="add"
-                    >
-                        <x-ei-plus class="h-8 w-8"/>
-                        <span class="align-middle">
+                                <button
+                                    class="block sm:text-sm border-gray-300"
+                                    x-show="showDeleteField"
+                                    @click.stop="remove(option)"
+                                >
+                                    <x-ei-close class="text-gray-500 h-6 w-6"/>
+                                </button>
+                            </div>
+                        </template>
+                        <button
+                            class="flex flex-row items-center block sm:text-sm text-base text-gray-500 border-gray-300 ml-auto mr-0"
+                            x-show="showAddField"
+                            @click.stop="add"
+                        >
+                            <x-ei-plus class="h-8 w-8"/>
+                            <span class="align-middle">
                                 Add new
                             </span>
-                    </button>
+                        </button>
+                    </div>
 
                     <div>
                         <label for="location" class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
@@ -84,15 +92,32 @@
                             wire:model="industry"
                             id="location"
                             name="location"
-                            class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-full">
+                            class="text-gray-600 mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-full">
                             <option selected disabled>
                                 {{ 'Select' }}
                             </option>
                             @foreach($industries as $industry_option)
-                                <option value="{{ $industry_option['value'] }}">{{ $industry_option['value'] }}</option>
+                                <option
+                                    value="{{ $industry_option['value'] }}">{{ $industry_option['value'] }}</option>
                             @endforeach
                         </select>
-
+                    </div>
+                    <div>
+                        <label for="user" class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
+                            User
+                        </label>
+                        <select
+                            wire:model="user"
+                            id="location"
+                            name="user"
+                            class="text-gray-600 mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-full">
+                            <option selected>
+                                {{ '-' }}
+                            </option>
+                            @foreach($users->sortByDesc('name') as $one_user)
+                                <option value="{{ $one_user->name }}">{{ $one_user->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <button wire:click="find_results()"
