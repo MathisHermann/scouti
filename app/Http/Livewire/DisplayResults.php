@@ -19,21 +19,19 @@ class DisplayResults extends Component
     public $default_user = 'Select User';
     public $results_id;
     public $request_number;
+    public $process_successful;
+    public $results_loaded;
 
     public function render()
     {
-        $process_finished = true;
-        /*  while(!$process_finished) {
-              $status = RapidMinerController::getJobStatus();
-              if($status == 'FINISHED')
-                  $process_finished = true;
-          }*/
+        $this->load_process_status();
         return view('livewire.display-results');
     }
 
     public function mount()
     {
         $this->get_data();
+        $this->results_loaded = false;
         $this->request_number = 'Select';
         $this->results_id = null;
         $this->user = $this->default_user;
@@ -49,7 +47,6 @@ class DisplayResults extends Component
             $this->last_search_parameters = json_decode($current_request->keywords, true);
         }
 
-
         $results = RapidMinerResult::where('search_engine_requests_id', $this->current_request_number)->orderBy('Score', 'desc')->orderBy('confidence', 'desc')->get();
 
         $this->calculate_score($results);
@@ -58,9 +55,13 @@ class DisplayResults extends Component
     public function updatedUser()
     {
         if ($this->user != $this->default_user) {
-            $user = User::where('name', $this->user)->first();
-            $user_id = $user->id;
-            $results = RapidMinerResult::where('users_id', $user_id)->get();
+            if ($this->user == '-')
+                $results = RapidMinerResult::all();
+            else {
+                $user = User::where('name', $this->user)->first();
+                $user_id = $user->id;
+                $results = RapidMinerResult::where('users_id', $user_id)->get();
+            }
             $this->results_id = $results->pluck('search_engine_requests_id')->unique();
             $this->request_number = 'Select';
         }
@@ -95,6 +96,22 @@ class DisplayResults extends Component
         }
         $scores->sortByDesc('score');
         $this->results = $scores;
+    }
+
+    public function load_process_status()
+    {
+        if (!$this->results_loaded) {
+            $status = RapidMinerController::getJobStatus();
+            if ($status == 'FINISHED' || $this->request_number == $this->current_request_number) {
+                $this->process_successful = true;
+                $this->results_loaded = true;
+                $this->get_data();
+            } elseif
+            ($status == 'ERROR')
+                $this->process_successful = false;
+            else
+                $this->process_successful = null;
+        }
     }
 
 }

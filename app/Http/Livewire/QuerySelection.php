@@ -23,9 +23,13 @@ class QuerySelection extends Component
     public $default_user = '-';
     public $modal_msg;
     public $ignore = false;
+    public $enable_loading;
+    public $results_loaded;
+    public $process_finished;
 
     public function mount()
     {
+        $this->enable_loading = false;
         // TODO: remove the values if not needed anymore!
         $this->terms = [['value' => '']];
         $temp_industries = IndustrySelection::latest()->first();
@@ -45,6 +49,7 @@ class QuerySelection extends Component
 
     public function render()
     {
+        $this->load_process_status();
         return view('livewire.query-selection');
     }
 
@@ -68,11 +73,14 @@ class QuerySelection extends Component
                 $user_id = $selected_user->id;
             }
 
+            $this->enable_loading = true;
 
             // TODO: Catch errors and make information accordingly
             $result = SearchEngineController::getSearchEngineLinks($query);
             $this->modal_msg = 'Processing Links';
             $result = SearchEngineController::getFormattedURLs($result);
+            $this->enable_loading = false;
+
 
             // TODO: Check if date is not older than some specific days. Either in Query above or here in the if statement.
             $keywords_sorted = $this->terms;
@@ -141,12 +149,22 @@ class QuerySelection extends Component
                 $query .= (strlen($query) > 0 ? '+' : '') . ($is_phrase ? '"' : '') . $part . ($is_phrase ? '"' : '');
             }
         }
-        //$is_phrase = strpos($this->industry, ' ');
-        //$query .= '+' . ($is_phrase ? '"' : '') . str_replace(' ', '+', $this->industry) . ($is_phrase ? '"' : '');
-        //$query .= '+' . str_replace(' ', '+', $this->industry);
         $query .= '+software';
 
         return $query;
     }
+
+    public function load_process_status()
+    {
+        if (!$this->results_loaded) {
+            $status = RapidMinerController::getJobStatus();
+            if ($status == 'FINISHED' || $status == 'ERROR') {
+                $this->process_finished = true;
+                $this->results_loaded = true;
+            } else
+                $this->process_finished = false;
+        }
+    }
+
 
 }

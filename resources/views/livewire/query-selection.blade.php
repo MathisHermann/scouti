@@ -1,6 +1,7 @@
-<div class="min-h-full">
-    <main class="mt-16 w-full">
-        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+<div wire:poll="load_process_status">
+    <div class="min-h-full">
+        <main class="mt-16 w-full">
+            <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                 <div class="w-full space-x-2 flex justify-end">
                     <a
                         class="py-2 px-4 mt-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -18,12 +19,12 @@
                     </a>
                 </div>
 
-            <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 mt-3">
-                <label for="name"
-                       class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
-                    Keywords
-                </label>
-                <div x-data="{
+                <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 mt-3">
+                    <label for="name"
+                           class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
+                        Keywords
+                    </label>
+                    <div x-data="{
                         show_add_button: true,
                         show_delete_button: false,
                         fields: @entangle('terms').defer,
@@ -51,123 +52,134 @@
                            }
                         }
                     }"
-                     class="space-y-4"
-                >
-                    <div class="space-y-2">
-                        <template x-for="option in fields">
-                            <div class="flex justify-between">
-                                <input
+                         class="space-y-4"
+                    >
+                        <div class="space-y-2">
+                            <template x-for="option in fields">
+                                <div class="flex justify-between">
+                                    <input
+                                        @if (!$process_finished) disabled @endif
                                     type="text"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 px-4 rounded-full"
-                                    x-model="option.value"
-                                    @keyup.enter="$wire.find_results()"
-                                >
+                                        class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 px-4 rounded-full"
+                                        x-model="option.value"
+                                        @keyup.enter="$wire.find_results()"
+                                    >
 
-                                <button
+                                    <button
+                                        @if (!$process_finished) disabled @endif
                                     class="block sm:text-sm border-gray-300"
-                                    x-show="showDeleteField"
-                                    @click.stop="remove(option)"
-                                >
-                                    <x-ei-close class="text-gray-500 h-6 w-6"/>
-                                </button>
-                            </div>
-                        </template>
-                        <button
+                                        x-show="showDeleteField"
+                                        @click.stop="remove(option)"
+                                    >
+                                        <x-ei-close class="text-gray-500 h-6 w-6"/>
+                                    </button>
+                                </div>
+                            </template>
+                            <button
+                                @if (!$process_finished) disabled @endif
                             class="flex flex-row items-center block sm:text-sm text-base text-gray-500 border-gray-300 ml-auto mr-0"
-                            x-show="showAddField"
-                            @click.stop="add"
-                        >
-                            <x-ei-plus class="h-8 w-8"/>
-                            <span class="align-middle">
+                                x-show="showAddField"
+                                @click.stop="add"
+                            >
+                                <x-ei-plus class="h-8 w-8"/>
+                                <span class="align-middle">
                                 Add new
                             </span>
+                            </button>
+                        </div>
+
+                        <div>
+                            <label for="location" class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
+                                Industry
+                            </label>
+                            <select
+                                wire:model="industry"
+                                @if (!$process_finished) disabled @endif
+                                id="location"
+                                name="location"
+                                class="text-gray-600 mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-full">
+                                <option selected disabled>
+                                    {{ 'Select' }}
+                                </option>
+                                @foreach($industries as $industry_option)
+                                    <option
+                                        value="{{ $industry_option['value'] }}">{{ $industry_option['value'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label for="user" class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
+                                User
+                            </label>
+                            <select
+                                wire:model="user"
+                                @if (!$process_finished) disabled @endif
+                                id="location"
+                                name="user"
+                                class="text-gray-600 mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-full">
+                                <option selected>
+                                    {{ '-' }}
+                                </option>
+                                @foreach($users->sortByDesc('name') as $one_user)
+                                    <option value="{{ $one_user->name }}">{{ $one_user->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <button @if (!$process_finished) disabled @endif wire:click="find_results()"
+                                class="w-full py-2 px-4 mt-3 border border-transparent rounded-md shadow-sm text-sm font-medium
+                        text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2
+                        focus:ring-indigo-500"
+                        >
+                            Find results
                         </button>
                     </div>
-
-                    <div>
-                        <label for="location" class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
-                            Industry
-                        </label>
-                        <select
-                            wire:model="industry"
-                            id="location"
-                            name="location"
-                            class="text-gray-600 mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-full">
-                            <option selected disabled>
-                                {{ 'Select' }}
-                            </option>
-                            @foreach($industries as $industry_option)
-                                <option
-                                    value="{{ $industry_option['value'] }}">{{ $industry_option['value'] }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div>
-                        <label for="user" class="ml-px pl-4 block sm:text-sm text-lg font-medium text-gray-700">
-                            User
-                        </label>
-                        <select
-                            wire:model="user"
-                            id="location"
-                            name="user"
-                            class="text-gray-600 mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-full">
-                            <option selected>
-                                {{ '-' }}
-                            </option>
-                            @foreach($users->sortByDesc('name') as $one_user)
-                                <option value="{{ $one_user->name }}">{{ $one_user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <button wire:click="find_results()"
-                            class="w-full py-2 px-4 mt-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    >
-                        Find results
-                    </button>
                 </div>
             </div>
-        </div>
 
-        <div wire:loading.delay.longer>
+        </main>
+    </div>
+</div>
 
-            <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
-                 aria-modal="true">
-                <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+@if($enable_loading)
+    <div wire:loading.delay.longer>
 
-                    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-                         aria-hidden="true">
-                    </div>
+        <div class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+             aria-modal="true">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
 
-                    <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
-                          aria-hidden="true">
+                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                     aria-hidden="true">
+                </div>
+
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
+                      aria-hidden="true">
                         &#8203;
                     </span>
 
-                    <div
-                        class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-                        <div>
-                            <div class="mt-5 sm:mt-6">
-                                <div
-                                    class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-black">
-                                    <div>
-                                        <div style="border-top-color:transparent"
-                                             class="w-16 h-16 border-4 border-gray-700 border-dotted rounded-full animate-spin-slow"></div>
-                                    </div>
+                <div
+                    class="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+                    <div>
+                        <div class="mt-5 sm:mt-6">
+                            <div
+                                class="inline-flex justify-center w-full px-4 py-2 text-base font-medium text-black">
+                                <div>
+                                    <div style="border-top-color:transparent"
+                                         class="w-16 h-16 border-4 border-gray-700 border-dotted rounded-full animate-spin-slow"></div>
                                 </div>
                             </div>
-                            <div class="mt-3 text-center sm:mt-5">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                                    Loading
-                                </h3>
-                            </div>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-5">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Loading
+                            </h3>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
-</div>
+    </div>
+@endif
 
 @if(Session::has('error_dropdown_selection'))
     <!-- This example requires Tailwind CSS v2.0+ -->
@@ -228,4 +240,3 @@
         </div>
     </div>
 @endif
-
