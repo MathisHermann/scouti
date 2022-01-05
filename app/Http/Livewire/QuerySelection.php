@@ -73,13 +73,11 @@ class QuerySelection extends Component
                 $user_id = $selected_user->id;
             }
 
-            $this->enable_loading = true;
 
             // TODO: Catch errors and make information accordingly
             $result = SearchEngineController::getSearchEngineLinks($query);
             $this->modal_msg = 'Processing Links';
             $result = SearchEngineController::getFormattedURLs($result);
-            $this->enable_loading = false;
 
 
             // TODO: Check if date is not older than some specific days. Either in Query above or here in the if statement.
