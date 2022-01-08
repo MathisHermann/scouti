@@ -64,6 +64,6 @@ class SearchEngineController extends Controller
 
     private static function make_request($query, $parameters = ['startIndex' => 1])
     {
-        return Http::acceptJson()->get(env('GOOGLE_URL') . '?cx=' . env('GOOGLE_SEARCH_ENGINE') . '&q=' . $query . '&key=' . env('GOOGLE_API_KEY') . '&start=' . $parameters['startIndex'])->json();
+        return Http::acceptJson()->get(env('GOOGLE_URL') . '?cx=' . env('GOOGLE_SEARCH_ENGINE_1_ID') . '&q=' . $query . '&key=' . env('GOOGLE_API_KEY') . '&start=' . $parameters['startIndex'])->json();
     }
 }
