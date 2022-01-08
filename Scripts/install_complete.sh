@@ -33,9 +33,9 @@
 #
 #  Or download directly from GitHub and install (if wget is available):
 #      wget https://raw.githubusercontent.com/MathisHermann/scripts/main/install_complete.sh
-#      sudo bash create-fast-site.sh -n
-#      bash create-fast-site.sh -a
-#      sudo bash create-fast-site.sh -c
+#      sudo bash install_complete.sh -n
+#      bash install_complete.sh -a
+#      sudo bash install_complete.sh -c
 #
 #  Options:
 #      -h  Show Help
@@ -107,7 +107,7 @@ install_nginx ()
             apt_install "apt-transport-https"
             apt_install "software-properties-common"
             echo -e "Installing dependencies"
-            add-apt-repository ppa:ondrej/php
+            add-apt-repository -y ppa:ondrej/php
             sudo apt update
             apt_install "php8.0"
             apt_install "php8.0-mbstring"
@@ -149,7 +149,6 @@ install_nginx ()
     # Install mysql and add db schema and user
     echo -e "Install and create ${FONT_BOLD}${FONT_UNDERLINE}database${FONT_RESET}."
     apt_install "mysql-server"
-    apt_install "mysql-client-core-5.7"
     create_db
 
     echo -e "${FONT_BOLD}${FONT_UNDERLINE}Reboot now the machine and then run the second script.${FONT_RESET}"
@@ -164,12 +163,13 @@ install_app ()
     cd scouti/
     echo -e "${FONT_BOLD}Copying .env. Enter the credentials in here before the next step.${FONT_RESET}"
     cp .env.example .env
-    
+    nano .env
+
     # Install Composer dependencies
     echo -e "${FONT_BOLD}Install composer Dependencies${FONT_RESET}"
-    cd scouti
     composer install
     php artisan key:generate
+    php artisan migrate
 }
 
 nginx_config ()
@@ -183,6 +183,8 @@ nginx_config ()
     adduser "${user}" www-data
     chown -R www-data.www-data /var/www/scouti/storage
     chown -R www-data.www-data /var/www/scouti/bootstrap/cache
+    chmod -R 775 /var/www/scouti/storage
+    chown -R 775 /var/www/scouti/bootstrap/cache
 
     # Get the installed PHP major and minor version (example: 7.2)
     php_ver=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
@@ -294,7 +296,7 @@ create_db()
     echo "Create database scouti"
     mysql --user=root -e "DROP DATABASE IF EXISTS scouti; CREATE DATABASE scouti /*\ 40100 DEFAULT CHARACTER SET UTF8*/;"
     echo "Create app-db-user"
-    mysql --user=root -e "CREATE USER 'souti_user'@'localhost' IDENTIFIED BY 'pass';"
+    mysql --user=root -e "CREATE USER 'scouti_user'@'localhost' IDENTIFIED BY 'pass';"
     echo "Grant privileges"
     mysql --user=root -e "GRANT ALL PRIVILEGES ON scouti.* TO 'scouti_user'@'localhost';"
     mysql --user=root -e "FLUSH PRIVILEGES;"
