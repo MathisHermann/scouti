@@ -294,7 +294,7 @@ create_db()
     echo "Create database scouti"
     mysql --user=root -e "DROP DATABASE IF EXISTS scouti; CREATE DATABASE scouti /*\ 40100 DEFAULT CHARACTER SET UTF8*/;"
     echo "Create app-db-user"
-    mysql --user=root -e "CREATE USER souti_user@localhost IDENTIFIED BY 'pass';"
+    mysql --user=root -e "CREATE USER 'souti_user'@'localhost' IDENTIFIED BY 'pass';"
     echo "Grant privileges"
     mysql --user=root -e "GRANT ALL PRIVILEGES ON scouti.* TO 'scouti_user'@'localhost';"
     mysql --user=root -e "FLUSH PRIVILEGES;"
