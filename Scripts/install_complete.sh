@@ -76,7 +76,6 @@ user=$USER
 main () 
 {
     get_options "$@"
-    
 
     if [[ "${installation_type}" == "nginx" ]]; then
         check_root
@@ -102,13 +101,13 @@ install_nginx ()
             echo -e "Updating apt"
             sudo apt update
             apt_install "wget"
+            apt_install "curl"
             apt_install "lsb-release"
             apt_install "ca-certificates"
             apt_install "apt-transport-https"
             apt_install "software-properties-common"
-            echo -e "Installing dependencies"  
-            echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/sury-php.list
-            wget -qO - https://packages.sury.org/php/apt.gpg | sudo apt-key add -
+            echo -e "Installing dependencies"
+            add-apt-repository ppa:ondrej/php
             sudo apt update
             apt_install "php8.0"
             apt_install "php8.0-mbstring"
@@ -116,13 +115,14 @@ install_nginx ()
             apt_install "php8.0-bcmath"
             apt_install "php8.0-fpm"
             apt_install "php8.0-zip"
+            apt_install "php8.0-mysql"
+            apt_install "php8.0-curl"
         fi
     fi
 
     apt_install "git"
     apt_install "unzip"
-    curl -s https://getcomposer.org/installer | php
-    mv composer.phar /usr/local/bin/composer
+    apt_install "composer"
 
     if hash apt 2>/dev/null; then
         # Update [apt] Package Manager
@@ -145,6 +145,12 @@ install_nginx ()
 
     # Install nginx and PHP
     apt_install 'nginx'
+
+    # Install mysql and add db schema and user
+    echo -e "Install and create ${FONT_BOLD}${FONT_UNDERLINE}database${FONT_RESET}."
+    apt_install "mysql-server"
+    apt_install "mysql-client-core-5.7"
+    create_db
 
     echo -e "${FONT_BOLD}${FONT_UNDERLINE}Reboot now the machine and then run the second script.${FONT_RESET}"
     reboot
@@ -281,6 +287,21 @@ apt_remove ()
     else
         echo -e "${FONT_BOLD}${FONT_UNDERLINE}${1}${FONT_RESET} is not installed"
     fi
+}
+
+create_db()
+{
+    echo "Create database scouti"
+    mysql --user=root -e "DROP DATABASE IF EXISTS scouti; CREATE DATABASE scouti /*\ 40100 DEFAULT CHARACTER SET UTF8*/;"
+    echo "Create app-db-user"
+    mysql --user=root -e "CREATE USER souti_user@localhost IDENTIFIED BY 'pass';"
+    echo "Grant privileges"
+    mysql --user=root -e "GRANT ALL PRIVILEGES ON scouti.* TO 'scouti_user'@'localhost';"
+    mysql --user=root -e "FLUSH PRIVILEGES;"
+    echo "Database 'scouti' created with credentials:"
+    echo "User: scouti_user"
+    echo "Password: pass"
+    mysql --user=root -e "SHOW DATABASES;"
 }
 
 get_options ()
