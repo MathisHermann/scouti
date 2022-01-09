@@ -12,6 +12,7 @@ class DisplayResults extends Component
 {
 
     public $last_search_parameters;
+    public $request_date;
     public $results;
     public $current_request_number;
     public $users;
@@ -45,10 +46,11 @@ class DisplayResults extends Component
         if ($current_request != null) {
             $this->current_request_number = $current_request->id;
             $this->last_search_parameters = json_decode($current_request->keywords, true);
+            $this->request_date = $current_request->created_at;
         }
 
         $results = RapidMinerResult::where('search_engine_requests_id', $this->current_request_number)->orderBy('Score', 'desc')->orderBy('confidence', 'desc')->get();
-
+        ray($results, $this->current_request_number, 'hello');
         $this->calculate_score($results);
     }
 
@@ -106,11 +108,11 @@ class DisplayResults extends Component
                 $this->process_successful = true;
                 $this->results_loaded = true;
                 $this->get_data();
-            } elseif
-            ($status == 'ERROR')
+                ray($this->process_successful, $this->results);
+            } elseif ($status == 'ERROR') {
                 $this->process_successful = false;
-            else
-                $this->process_successful = null;
+            } else
+            $this->process_successful = null;
         }
     }
 

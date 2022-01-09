@@ -1,4 +1,4 @@
-<div wire:poll.500ms="load_process_status">
+<div wire:poll.1000ms="load_process_status">
     <div class="min-h-full">
         <main class="p-16 w-full">
             <div class="w-full space-x-2 flex justify-end mb-4">
@@ -87,6 +87,12 @@
                                     </li>
                                 @endif
                             @endforeach
+                            <li>
+                                <span class="font-medium text-gray-600">
+                                    Date:
+                                </span>
+                                {{ date_format($request_date, 'd.m.Y - H:i') }}
+                            </li>
                         </ul>
                     @else
                         <span class="font-medium">
@@ -96,8 +102,10 @@
                 </div>
             </div>
 
-            @if ($process_successful == null)
-                The request is processed. It takes about three minutes to load the results.
+            @if ($process_successful === null)
+                <div class="text-center w-full">
+                    The request is processed. It takes about three minutes to load the results.
+                </div>
             @elseif ($process_successful)
                 <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach($results->sortByDesc('score') as $result)
@@ -185,7 +193,6 @@
                                                         {{ $result['text'] }}
                                                     </h3>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -194,6 +201,10 @@
                         </li>
                     @endforeach
                 </ul>
+            @else
+                <div class="text-center w-full">
+                    Sadly the process did not finish correctly. Either there was an error or there were no results.
+                </div>
             @endif
         </main>
     </div>
