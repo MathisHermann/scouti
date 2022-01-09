@@ -31,7 +31,7 @@ In the last section a table is added where credentials can be noted down. This i
     - [Preconditions](#preconditions-1)
     - [Installation](#installation-2)
   - [Installation Locally](#installation-locally)
-  - [Configuration](#configuration)
+  - [Configuration](#configuration-1)
 - [Hot Stuff](#hot-stuff)
   - [Videos](#videos)
   - [Table of Keys and IDs](#table-of-keys-and-ids)
