@@ -8,7 +8,7 @@ Thank you for using this project to search for software. We introduce an evaluat
 
 Disclaimer: The software provided is a prototype. It is not guaranteed that the results are stable.
 
-In the last section a table is added where credentials can be noted down. This is useful to not always have to look them up. If the text mentions to note down something, it references the table.
+In the last section a table is added where (or how) credentials can be noted down. This is useful to not always have to look them up. If the text mentions to note down something, it references the table.
 
 ## Content
 
@@ -90,7 +90,7 @@ Now that the access to the programmable search engine and the MeaningCloud API h
 
 RapidMiner is a state-of-the-art data processing tool. It enables fast processing of large amounts of information. It can be used as a desktop application (RapidMiner Studio) or on a remote server with the RapidMiner AI Hub. The process we designed uses the latter. In this section we show how to install an instance of the AI Hub on a server.
 
-In this section it is only described how to run the process on AI Hub. If it is needed to run the process locally in RapidMiner Studio, it is needed to install some further required packages. Find further information in the section Run Locally.
+In this section it is only described how to run the process on AI Hub. If it is needed to run the process locally in RapidMiner Studio, it is needed to install some further required packages. Find further information in the section [Run Locally](#run-locally).
 
 ### Preconditions
 
@@ -284,7 +284,7 @@ bash install_complete.sh -a
 ```
 
 This command clones the repository and installs the application. It **must not be run with sudo** because: Never run composer with such privileges!
-Further, the script opens the .env file. See the section Configuration for further information.
+Further, the script opens the .env file. See the section [Configuration](#configuration-1) for further information.
 
 After a successful installation the last step is to configure the nginx web server:
 ```
