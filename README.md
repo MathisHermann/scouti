@@ -9,7 +9,7 @@ For the implementation we use following tools:
 - RapidMiner: Natural Language Processing
 
 ## Usage
-To use scouti you need to configure a programmable search engine from google. Visit therefore the official google guide.
+To use scouti there are several systems involved. For a full instruction, visit the guide (include guide).
 Enter the credentials in the `.env` file as follows:
 ```
 GOOGLE_URL=https://customsearch.googleapis.com/customsearch/v1
@@ -20,10 +20,10 @@ The entries can vary based on the configuration of the search engine.
 
 ## Roadmap
 - ~~Set up website and search interface~~ ✅
-- Get google search results
-- Evaluate search results (what kind of source is it - website or other document)
-- Process the data in RapidMiner
-- Display the results to the user
+- ~~Get google search results~~ ✅
+- ~~Evaluate search results (what kind of source is it - website or other document)~~ ✅
+- ~~Process the data in RapidMiner~~ ✅
+- ~~Display the results to the user~~ ✅
 
 ## License
 The tool is an open-sourced software and licensed under the  [MIT license](https://opensource.org/licenses/MIT).
