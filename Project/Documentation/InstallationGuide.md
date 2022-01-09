@@ -12,11 +12,11 @@ In the last section a table is added where credentials can be noted down. This i
 
 ## Content
 
-- [Google Programmable Search Engine](#Google Programmable Search Engine)
-- [MeaningCloud API Access](#MeaningCloud API Access)
-- [RapidMiner AI Hub](#RapidMiner AI Hub)
-- [Web Application Scouti](#Web Application Scouti)
-- [Hot Stuff](#Hot Stuff)
+- [Google Programmable Search Engine](#google-programmable-search-engine)
+- [MeaningCloud API Access](#meaningcloud-api-access)
+- [RapidMiner AI Hub](#rapidminer-ai-hub)
+- [Web-Application Scouti](#web-application-scouti)
+- [Hot Stuff](#hot-stuff)
 
 ## Google Programmable Search Engine
 
@@ -140,27 +140,27 @@ To be able to communicate with external services, there are several connections 
 
 In RapidMiner Studio, we first need to connect to the newly created server. In the tab Repository, open the context menu on AI Hub Repository and select Configure Repository. In the window, enter the IP-Address to the server and select RapidMiner AI Hub / Enterprise Login.
 
-<img src="assets/imgs/repo_aihub.png" alt="View Repository" width="500px" align="right"/>
+<img src="assets/imgs/repo_aihub.png" alt="View Repository" width="500px"/>
 
 After the confirmation Check & Save, a window opens. Enter the credentials for the admin user. The connection now should be established.
 
-<img src="assets/imgs/config_aihub_connection.png" alt="Edit Connection to AI Hub" width="500px" align="right"/>
+<img src="assets/imgs/config_aihub_connection.png" alt="Edit Connection to AI Hub" width="500px"/>
 
 ##### Database
 
 In the tab Repository select the menu item AI Hub Repository > Connections and select Create Connection.
 
-<img src="assets/imgs/repo_aihub_create_connection.png" alt="Create new Connection" width="500px" align="right"/>
-<img src="assets/imgs/create_connection_db.png" alt="Create DB Connection" width="500px" align="right"/>
-<img src="assets/imgs/edit_connection_db.png" alt="Edit DB Connection" width="500px" align="right"/>
+<img src="assets/imgs/repo_aihub_create_connection.png" alt="Create new Connection" width="500px"/>
+<img src="assets/imgs/create_connection_db.png" alt="Create DB Connection" width="500px"/>
+<img src="assets/imgs/edit_connection_db.png" alt="Edit DB Connection" width="500px"/>
 
 ##### MeaningCloud
 Adding a connection of MeaningCloud is parallel to the one described before. Instead of choosing Database as Connection Type, now the connection is MeaningCloud.
 
 After Create, only the API key has to be added and then saved.
 
-<img src="assets/imgs/create_connection_mc.png" alt="Create MC Connection" width="500px" align="right"/>
-<img src="assets/imgs/edit_connection_mc.png" alt="Edit MC Connection" width="500px" align="right"/>
+<img src="assets/imgs/create_connection_mc.png" alt="Create MC Connection" width="500px"/>
+<img src="assets/imgs/edit_connection_mc.png" alt="Edit MC Connection" width="500px"/>
 
 #### Add and Configure Process
 Now that the needed pre-conditions the process can be imported and all connections and accesses can be established. Therefore, open RapidMiner Studio and select AI Hub as the repository.
@@ -169,15 +169,15 @@ Now that the needed pre-conditions the process can be imported and all connectio
 
 In the treeview in the tab Repository, select the menu item home>admin (or the user with which you want to run the process) and open the context menu. There, select the first item Store Process Here. This opens a new window where the name for the process can be selected. Save and open the new process.
 
-<img src="assets/imgs/add_new_process.png" alt="Create new Process" width="500px" align="right"/>
+<img src="assets/imgs/add_new_process.png" alt="Create new Process" width="500px"/>
 
 To add the process to RapidMiner, we recommend to enable the panel XML.
 
-<img src="assets/imgs/enable_xml_view.png" alt="Enable XML View" width="500px" align="right"/>
+<img src="assets/imgs/enable_xml_view.png" alt="Enable XML View" width="500px"/>
 
 In the folder `RapidMiner`find the file `RapidMiner_Process.txt`. Open the file, copy its whole content and replace the current content in the XML view. Confirm it by pressing the green check.
 
-<img src="assets/imgs/xml_view.png" alt="XML View" width="500px" align="right"/>
+<img src="assets/imgs/xml_view.png" alt="XML View" width="500px"/>
 
 ##### Add Connections
 
@@ -185,7 +185,7 @@ In the process there are several accesses of connections. More precisely, both t
 
 In the main process select the first operator “Retrieve pp”. In the parameters select the folder icon. In the window select the correct connection to the database.
 
-<img src="assets/imgs/change_retrieve_db.png" alt="Change retrieve DB Connection" width="500px" align="right"/>
+<img src="assets/imgs/change_retrieve_db.png" alt="Change retrieve DB Connection" width="500px"/>
 
 The same order has to be done for the MeaningCloud connection. In the sub-process of phase 4 select the connection operator and then the correct connection.
 
@@ -201,18 +201,18 @@ There are two documents that have to be added. Both can be found in the folder R
 
 To add those two files, select the button Import Data and in the view Repository. For each file, navigate to it and select it. To save it, select the place where you want.
 
-<img src="assets/imgs/repo_aihub.png" alt="View Repository" width="500px" align="right"/>
+<img src="assets/imgs/repo_aihub.png" alt="View Repository" width="500px"/>
 
 In the sub-process of phase 2 (Software) select the upper operator Process Documents and select in the operator Retrieve NLP Filter Words the according file (NLP_Filter_Words).
 The same has to be done for the other file (software_names). The process is analogously to adding a connection.
 
-<img src="assets/imgs/phase_two.png" alt="Phase Two" width="500px" align="right"/>
+<img src="assets/imgs/phase_two.png" alt="Phase Two" width="500px"/>
 
 ### Run Locally
 
 To run the process locally first, some extensions need to be installed. On AI Hub the extensions are installed already. Further, as Python is used in the process, it has to be installed on the machine where it is run. Further, some packages are needed.
 
-<img src="assets/imgs/marketplace_location.png" alt="Menu Item Marketplace" width="500px" align="right"/>
+<img src="assets/imgs/marketplace_location.png" alt="Menu Item Marketplace" width="500px"/>
 
 #### Install Extensions
 
@@ -235,7 +235,7 @@ Now all required extensions and packages are installed.
 
 To be able to run the process locally, all connections that have been established on the I Hub have to be established locally as well. Further, all imported data also has to be imported. After this is done, the process can be run locally.
 
-## Web-Application Scouti
+## WebApplication Scouti
 
 There are mainly two locations where the application can be installed. Either locally on a personal machine or on a server. This chapter describes in detail how to deploy the application on a server and briefly shows how to deploy it locally.
 
