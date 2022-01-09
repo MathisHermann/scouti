@@ -1,22 +1,14 @@
 ## Project
-This is the product of a practical project of some students of the FHNW School of Business. The prototype will be able to find websites with information about different software products and evaluate the quality of those products with natural language processing.
-
-The development has just started and thus there is no great functionality implemented as described above.
+This is the product of a practical project of some students of the FHNW School of Business. The prototype is able to find websites with information about different software products and evaluate the quality of those products with natural language processing.
 
 For the implementation we use following tools:
 - Laravel: PHP Web-Application framework
-- Google programmable search engine
+- Google Programmable Search Engine
+- MeaningCloud
 - RapidMiner: Natural Language Processing
 
 ## Usage
-To use scouti there are several systems involved. For a full instruction, visit the guide (include guide).
-Enter the credentials in the `.env` file as follows:
-```
-GOOGLE_URL=https://customsearch.googleapis.com/customsearch/v1
-GOOGLE_API_KEY=personal_api_key
-GOOGLE_SEARCH_ENGINE=custom_search_engine_key
-```
-The entries can vary based on the configuration of the search engine.
+To use scouti there are several systems involved. For a full instruction, visit the [guide](https://github.com/MathisHermann/scouti/tree/master/Project/Documentation).
 
 ## Roadmap
 - ~~Set up website and search interface~~ ✅
