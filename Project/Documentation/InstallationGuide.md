@@ -13,10 +13,28 @@ In the last section a table is added where credentials can be noted down. This i
 ## Content
 
 - [Google Programmable Search Engine](#google-programmable-search-engine)
+  - [Installation](#installation)
+    - [First Search Enigne](#first-search-engie)
+    - [Second Search Engine](#second-search-engine)
 - [MeaningCloud API Access](#meaningcloud-api-access)
 - [RapidMiner AI Hub](#rapidminer-ai-hub)
+  - [Preconditions](#preconditions)
+  - [Installation](#installation-1)
+  - [Configuration](#configuration)
+    - [Connections](#connections)
+    - [Add and Configure Process](#add-and-configure-process)
+  - [Run Locally](#run-locally)
+    - [Install Extensions](#install-extensions)
+    - [Install Python and Packages](#install-python-and-packages)
 - [Web-Application Scouti](#web-application-scouti)
+  - [Installation on Server](#installation-on-server)
+    - [Preconditions](#preconditions-1)
+    - [Installation](#installation-2)
+  - [Installation Locally](#installation-locally)
+  - [Configuration](#configuration)
 - [Hot Stuff](#hot-stuff)
+  - [Videos](#videos)
+  - [Table of Keys and IDs](#table-of-keys-and-ids)
 
 ## Google Programmable Search Engine
 
@@ -235,7 +253,7 @@ Now all required extensions and packages are installed.
 
 To be able to run the process locally, all connections that have been established on the I Hub have to be established locally as well. Further, all imported data also has to be imported. After this is done, the process can be run locally.
 
-## WebApplication Scouti
+## Web-Application Scouti
 
 There are mainly two locations where the application can be installed. Either locally on a personal machine or on a server. This chapter describes in detail how to deploy the application on a server and briefly shows how to deploy it locally.
 
