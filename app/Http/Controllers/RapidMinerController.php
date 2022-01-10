@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Http;
 
 class RapidMinerController extends Controller
 {
+    /**
+     * Schedule the RM process on the server. Process runs immediately after calling this function.
+     * @param string $job
+     * @return \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response
+     */
     public static function deployProcess($job = 'pp')
     {
         $url = env('RAPID_MINER_ADDRESS') . '/executions/schedules';
@@ -22,8 +27,10 @@ class RapidMinerController extends Controller
         return Http::withBody(json_encode($body), 'application/json')->withHeaders($headers)->post($url);
     }
 
-    // Return the status of the job
-
+    /**
+     * Get the status of the last scheduled job. Does not consider past jobs.
+     * @return mixed
+     */
     public static function getJobStatus()
     {
         $id_token = self::getAccessToken();
@@ -40,6 +47,12 @@ class RapidMinerController extends Controller
         return $response_json->content[0]->state;
     }
 
+    /**
+     * Get the latest access token.
+     * Is needed for each AI Hub api call and expires after some time.
+     * Thus, it is newly called everytime the api is accessed.
+     * @return mixed
+     */
     public static function getAccessToken()
     {
         $url = env('RAPID_MINER_ADDRESS') . '/api/rest/tokenservice';

@@ -31,14 +31,10 @@ class Settings extends Component
             if(strlen(trim($industry_field['value'])) > 0)
                 array_push($industries_to_save, $industry_field);
         }
-
         $settings = new IndustrySelection([
             'industries' => json_encode($industries_to_save),
         ]);
-
         $settings->save();
-
         $this->redirect('/settings');
-
     }
 }

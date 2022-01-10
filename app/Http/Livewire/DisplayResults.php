@@ -39,6 +39,9 @@ class DisplayResults extends Component
         $this->users = User::all();
     }
 
+    /**
+     * Load the data and mount it to the livewire component.
+     */
     public function get_data()
     {
         $current_request = SearchEngineRequest::all()->last();
@@ -54,6 +57,10 @@ class DisplayResults extends Component
         $this->calculate_score($results);
     }
 
+    /**
+     * If a user is selected in the frontend, this function is called.
+     * Loads the result-ids of this user such that the results can be selected.
+     */
     public function updatedUser()
     {
         if ($this->user != $this->default_user) {
@@ -69,6 +76,10 @@ class DisplayResults extends Component
         }
     }
 
+    /**
+     * If a result-id is selected, this function is called.
+     * Updates the results page and displays the results that are saved.
+     */
     public function updatedRequestNumber()
     {
         $results = RapidMinerResult::where('search_engine_requests_id', $this->request_number)->orderBy('Score', 'desc')->orderBy('confidence', 'desc')->get();
@@ -83,6 +94,11 @@ class DisplayResults extends Component
         $this->calculate_score($results);
     }
 
+    /**
+     * Calculates the score based on the score and confidence given by MeaningCloud results.
+     * Returns an array with the according information.
+     * @param $results
+     */
     public function calculate_score($results)
     {
         $scores = collect();
@@ -100,6 +116,11 @@ class DisplayResults extends Component
         $this->results = $scores;
     }
 
+    /**
+     * Loads the process status of the most current process.
+     * Is needed to load the results if the process has finished successfully.
+     * If not successful, an according message is shown.
+     */
     public function load_process_status()
     {
         if (!$this->results_loaded) {
@@ -115,5 +136,4 @@ class DisplayResults extends Component
             $this->process_successful = null;
         }
     }
-
 }

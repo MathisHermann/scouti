@@ -6,13 +6,16 @@ use Illuminate\Support\Facades\Http;
 
 class SearchEngineController extends Controller
 {
+    /**
+     * Make requests to the search engine and extract the links used to proceed the process
+     * @param $query
+     * @return \Illuminate\Support\Collection
+     */
     public static function getSearchEngineLinks($query)
     {
         // Google limits the queries per day. Thus, there is a limit for the search.
         $search_limit = 5;
         $limit = 0;
-        $no_results = false;
-
         $result = collect();
 
         $response = self::make_request($query);
@@ -21,11 +24,6 @@ class SearchEngineController extends Controller
         $result->add($response);
 
         $more_results = true;
-
-        while ($no_results) {
-
-        }
-
         while ($more_results && $limit < $search_limit) {
             try {
                 $parameters['startIndex'] = $result[0]['queries']['nextPage'][0]['startIndex'];
@@ -62,6 +60,12 @@ class SearchEngineController extends Controller
         return $formatted_URLs;
     }
 
+    /**
+     * Make the request to the search engine
+     * @param $query
+     * @param int[] $parameters
+     * @return array|mixed
+     */
     private static function make_request($query, $parameters = ['startIndex' => 1])
     {
         return Http::acceptJson()->get(env('GOOGLE_URL') . '?cx=' . env('GOOGLE_SEARCH_ENGINE_1_ID') . '&q=' . $query . '&key=' . env('GOOGLE_API_KEY') . '&start=' . $parameters['startIndex'])->json();

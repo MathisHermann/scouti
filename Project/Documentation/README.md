@@ -127,13 +127,23 @@ $ cd prod/
 ```
 Open the .env file
 ```
-$ nano prod/.env
+$ nano .env
 ```
 Edit the following variables:
 - In section Global parameters
+  - `PUBLIC_URL=http://ip.to.remote.server`
+  - `SSO_PUBLIC_URL=http://ip.to.remote.server`
   - `LEGACY_REST_BASIC_AUTH_ENABLED=true`  
 - In section RapidMiner server
   - `SERVER_LICENSE=YourLicenseKey`
+
+```
+$ sudo chmod a+rw .env
+$ sudo chown -R 2011:0 ssl/
+$ sudo chmod -R ug+w ssl/
+$ sudo chmod -R o-rwx ssl/
+```
+
 Run docker compose
 ```
 $ docker-compose up -d rm-init-svc

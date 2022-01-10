@@ -57,6 +57,7 @@ class QuerySelection extends Component
      * Gets called on firing the "Find results" button in the frontend.
      * Call the  function to make the search engine query string.
      * Call the search engine with the according string.
+     * If no industry is selected, a flash message is shown.
      */
     public function find_results()
     {
@@ -67,64 +68,53 @@ class QuerySelection extends Component
             $query = $this->make_string();
 
             $user_id = null;
-            if($this->user != $this->default_user)
-            {
+            if ($this->user != $this->default_user) {
                 $selected_user = User::where('name', $this->user)->first();
                 $user_id = $selected_user->id;
             }
 
-
-            // TODO: Catch errors and make information accordingly
             $result = SearchEngineController::getSearchEngineLinks($query);
             $this->modal_msg = 'Processing Links';
             $result = SearchEngineController::getFormattedURLs($result);
 
 
-            // TODO: Check if date is not older than some specific days. Either in Query above or here in the if statement.
             $keywords_sorted = $this->terms;
             asort($keywords_sorted);
 
-            $known_keywords = [];
-            if (!$this->ignore && false)
-                $known_keywords = SearchEngineRequest::knownKeywords($keywords_sorted)->get();
 
-            if (sizeof($known_keywords) > 0) {
-                dd('Fix this.');
-            } else {
-                if (!$this->ignore) {
-                    // Add the industry to the selection of the search terms
-                    $terms = $this->terms;
-                    array_push($terms, ['industry' => $this->industry]);
-                    $request = new SearchEngineRequest(
-                        [
-                            'users_id' => $user_id,
-                            'keywords' => json_encode($terms),
-                            'keywords_sorted' => json_encode($keywords_sorted),
-                            'industry' => $this->industry,
-                            'successful' => sizeof($result) > 0
-                        ]
-                    );
-                    $request->save();
+            if (!$this->ignore) {
+                // Add the industry to the selection of the search terms
+                $terms = $this->terms;
+                array_push($terms, ['industry' => $this->industry]);
+                $request = new SearchEngineRequest(
+                    [
+                        'users_id' => $user_id,
+                        'keywords' => json_encode($terms),
+                        'keywords_sorted' => json_encode($keywords_sorted),
+                        'industry' => $this->industry,
+                        'successful' => sizeof($result) > 0
+                    ]
+                );
+                $request->save();
 
-                    foreach ($result as $item) {
-                        $se_result = new SearchEngineResult([
-                            'url' => $item,
-                            'search_engine_requests_id' => $request->id
-                        ]);
-                        $se_result->save();
-                    }
-                }
-
-                $rapid_miner_response = RapidMinerController::deployProcess();
-                $rapid_miner_response_ok = $rapid_miner_response->ok();
-                if ($rapid_miner_response_ok)
-                    return redirect('results');
-                else {
-                    Session::flash('error_dropdown_selection', 'Deployment of rapidminer process not successful.');
-                    return redirect('/');
+                foreach ($result as $item) {
+                    $se_result = new SearchEngineResult([
+                        'url' => $item,
+                        'search_engine_requests_id' => $request->id
+                    ]);
+                    $se_result->save();
                 }
             }
 
+            $rapid_miner_response = RapidMinerController::deployProcess();
+            $rapid_miner_response_ok = $rapid_miner_response->ok();
+
+            if ($rapid_miner_response_ok)
+                return redirect('results');
+            else {
+                Session::flash('error_dropdown_selection', 'Deployment of rapidminer process not successful.');
+                return redirect('/');
+            }
         }
     }
 
@@ -152,6 +142,10 @@ class QuerySelection extends Component
         return $query;
     }
 
+    /**
+     * Loads the process status of the most current process.
+     * Is needed to disable the deployment of a new process while another one is running.
+     */
     public function load_process_status()
     {
         if (!$this->results_loaded) {
