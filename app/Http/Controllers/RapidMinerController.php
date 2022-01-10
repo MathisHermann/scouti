@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Support\Facades\Http;
 
 class RapidMinerController extends Controller
@@ -44,7 +45,12 @@ class RapidMinerController extends Controller
 
         $response = Http::withHeaders($headers)->get($url);
         $response_json = json_decode($response);
+        try {
+
         return $response_json->content[0]->state;
+        } catch (Exception $exception) {
+            return 'FINISHED';
+        }
     }
 
     /**
