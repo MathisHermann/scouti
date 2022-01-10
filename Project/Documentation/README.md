@@ -137,6 +137,7 @@ Edit the following variables:
 - In section RapidMiner server
   - `SERVER_LICENSE=YourLicenseKey`
 
+Change permissions for `.env`
 ```
 $ sudo chmod a+rw .env
 ```
