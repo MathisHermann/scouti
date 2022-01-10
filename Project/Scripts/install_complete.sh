@@ -184,7 +184,7 @@ nginx_config ()
     chown -R www-data.www-data /var/www/scouti/storage
     chown -R www-data.www-data /var/www/scouti/bootstrap/cache
     chmod -R 775 /var/www/scouti/storage
-    chown -R 775 /var/www/scouti/bootstrap/cache
+    chmod -R 775 /var/www/scouti/bootstrap/cache
 
     # Get the installed PHP major and minor version (example: 7.2)
     php_ver=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
