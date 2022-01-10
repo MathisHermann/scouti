@@ -286,7 +286,7 @@ Ssh into the server and check if wget is installed – if not install wget.
 
 If wget is installed, the script can be loaded:
 ```
-wget https://raw.githubusercontent.com/MathisHermann/scripts/main/install_complete.sh
+wget https://raw.githubusercontent.com/MathisHermann/scouti/master/Project/Scripts/install_complete.sh
 ```
 
 And afterwards run:
