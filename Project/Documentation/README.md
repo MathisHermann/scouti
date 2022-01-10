@@ -139,12 +139,19 @@ Edit the following variables:
 
 ```
 $ sudo chmod a+rw .env
-$ sudo chown -R 2011:0 ssl/
-$ sudo chmod -R ug+w ssl/
-$ sudo chmod -R o-rwx ssl/
 ```
 
 Run docker compose
+```
+$ docker-compose up -d rm-init-svc
+```
+Change permissions
+```
+$ sudo chmod -R o-rwx ssl/
+$ sudo chown -R 2011:0 ssl/
+$ sudo chmod -R ug+w ssl/
+```
+Run docker compose again
 ```
 $ docker-compose up -d rm-init-svc
 $ docker-compose up -d
