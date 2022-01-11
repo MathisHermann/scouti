@@ -337,7 +337,9 @@ DB_USERNAME=
 DB_PASSWORD=
 ```
 
-Now, the application can be accessed and run. Happy scouting.
+Now, the application can be accessed and run.  
+
+Happy scouting 🦄 😍
 
 ## Hot Stuff
 
@@ -345,14 +347,13 @@ Find some helpful hot stuff in here.
 
 ### Videos
 
-<!--- We have prepared several videos for the deployment, configuration and usage of Scouti. --->
-There are several videos in production that will explain some crucial steps.
+We have prepared some videos for the deployment, configuration and usage of _Scouti_.
 
-- Deployment RapidMiner AI Hub:
-- Configuration RapidMiner Process:
-- Deployment web application:
-- Configuration web application:
-- Usage Scouti:
+- Introduction: https://youtu.be/kYfGjDwL9kI
+- AI Hub Deployment: https://youtu.be/s0zxnuZ5cvA
+- Configuration RapidMiner Process: coming soon
+- Deploy Scouti Web App: https://youtu.be/AWc6P9XCIVg
+- Use Scouti: https://youtu.be/g2n_ywQ32vA
 
 ### Table of Keys and IDs
 
