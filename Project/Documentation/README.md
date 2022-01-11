@@ -351,8 +351,8 @@ We have prepared some videos for the deployment, configuration and usage of _Sco
 
 - Introduction: https://youtu.be/kYfGjDwL9kI
 - AI Hub Deployment: https://youtu.be/s0zxnuZ5cvA
-- Configuration RapidMiner Process: coming soon
-- Deploy Scouti Web App: https://youtu.be/AWc6P9XCIVg
+- Configuration RapidMiner Process: https://youtu.be/iCMxJvUqtrg
+- Deploy Scouti Web App: https://youtu.be/mMZ-_NuPKnY
 - Use Scouti: https://youtu.be/g2n_ywQ32vA
 
 ### Table of Keys and IDs
