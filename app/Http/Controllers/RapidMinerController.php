@@ -23,7 +23,7 @@ class RapidMinerController extends Controller
         ];
 
         //$body = '{\n  "process": "' . $job . '",\n  "location": "/home/bot/' . $job . '",\n  "reportError": true\n}';
-        $body = json_decode('{  "job": {  "location": "/home/bot/'. $job . '",  "queueName": "DEFAULT"},  "force": true,  "reportError": true }');
+        $body = json_decode('{  "job": {  "location": "/home/admin/' . $job . '",  "queueName": "DEFAULT"},  "force": true,  "reportError": true }');
 
         return Http::withBody(json_encode($body), 'application/json')->withHeaders($headers)->post($url);
     }
@@ -42,12 +42,10 @@ class RapidMinerController extends Controller
             'Content-Type' => 'application/json',
             'Accept' => 'application/json'
         ];
-
         $response = Http::withHeaders($headers)->get($url);
         $response_json = json_decode($response);
         try {
-
-        return $response_json->content[0]->state;
+            return $response_json->content[0]->state;
         } catch (Exception $exception) {
             return 'FINISHED';
         }

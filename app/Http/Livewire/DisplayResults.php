@@ -53,7 +53,6 @@ class DisplayResults extends Component
         }
 
         $results = RapidMinerResult::where('search_engine_requests_id', $this->current_request_number)->orderBy('Score', 'desc')->orderBy('confidence', 'desc')->get();
-        ray($results, $this->current_request_number, 'hello');
         $this->calculate_score($results);
     }
 
@@ -85,6 +84,7 @@ class DisplayResults extends Component
         $results = RapidMinerResult::where('search_engine_requests_id', $this->request_number)->orderBy('Score', 'desc')->orderBy('confidence', 'desc')->get();
 
         $current_request = SearchEngineRequest::find($this->request_number);
+        $this->request_date = $current_request->created_at;
         $this->current_request_number = 0;
         if ($current_request != null) {
             $this->current_request_number = $current_request->id;
@@ -129,11 +129,11 @@ class DisplayResults extends Component
                 $this->process_successful = true;
                 $this->results_loaded = true;
                 $this->get_data();
-                ray($this->process_successful, $this->results);
             } elseif ($status == 'ERROR') {
                 $this->process_successful = false;
-            } else
-            $this->process_successful = null;
+            } else {
+                $this->process_successful = null;
+            }
         }
     }
 }

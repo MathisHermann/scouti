@@ -106,7 +106,7 @@
                 <div class="text-center w-full">
                     The request is processed. It takes about three minutes to load the results.
                 </div>
-            @elseif ($process_successful)
+            @elseif ($process_successful && count($results) > 0)
                 <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach($results->sortByDesc('score') as $result)
 

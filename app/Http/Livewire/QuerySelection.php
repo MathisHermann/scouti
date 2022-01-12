@@ -106,7 +106,7 @@ class QuerySelection extends Component
                 }
             }
 
-            $rapid_miner_response = RapidMinerController::deployProcess();
+            $rapid_miner_response = RapidMinerController::deployProcess('scouti');
             $rapid_miner_response_ok = $rapid_miner_response->ok();
 
             if ($rapid_miner_response_ok)
