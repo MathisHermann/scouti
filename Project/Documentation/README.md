@@ -256,6 +256,7 @@ The following extensions need to be installed:
 -	Operator Toolbox
 -	Text Processing
 -	Web Mining  
+-	Python Scripting
 
 Said extensions can be added using the marketplace.
 
