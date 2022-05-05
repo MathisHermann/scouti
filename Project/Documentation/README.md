@@ -255,8 +255,9 @@ To run the process locally first, some extensions need to be installed. On AI Hu
 The following extensions need to be installed:
 -	Operator Toolbox
 -	Text Processing
--	Web Mining
-     Said extensions can be added using the marketplace.
+-	Web Mining  
+
+Said extensions can be added using the marketplace.
 
 
 #### Install Python and Packages
